@@ -54,7 +54,7 @@ const PostForm = ({ action, actionText, ...props }) => {
           controlId='exampleForm.ControlInput1'>
           <Form.Label>Published</Form.Label>
           <Form.Control
-            type='text'
+            type='date'
             placeholder='Enter date'
             value={publishedDate}
             onChange={(e) => setPublishedDate(e.target.value)}
