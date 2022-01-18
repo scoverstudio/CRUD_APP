@@ -3,7 +3,7 @@ import initialState from "./initialState";
 import postsRedux from "./postsRedux";
 
 const subreducers = {
-    posts: postsRedux
+  posts: postsRedux,
 };
 
 const reducer = combineReducers(subreducers);

@@ -11,18 +11,18 @@ import Footer from "./components/views/Footer/Footer";
 
 const App = () => {
   return (
-      <Container>
-        <Header />
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/post/:id' element={<SinglePost />} />
-          <Route path='/post/add' element={<AddPost />} />
-          <Route path='/post/edit/:id' element={<EditPost />} />
-          <Route path='/about' element={<About />} />
-          <Route path='*' element={<NotFound />} />
-        </Routes>
-        <Footer />
-      </Container>
+    <Container>
+      <Header />
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/post/:id' element={<SinglePost />} />
+        <Route path='/post/add' element={<AddPost />} />
+        <Route path='/post/edit/:id' element={<EditPost />} />
+        <Route path='/about' element={<About />} />
+        <Route path='*' element={<NotFound />} />
+      </Routes>
+      <Footer />
+    </Container>
   );
 };
 

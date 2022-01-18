@@ -1,8 +1,8 @@
-import styles from "./Post.module.scss";
+import styles from "./PostCard.module.scss";
 import { Container } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Post = ({ id, title, author, publishedDate, shortDescription }) => {
+const PostCard = ({ id, title, author, publishedDate, shortDescription }) => {
   return (
     <Container className={styles.post}>
       <div className={"border border-muted p-3 mb-3"}>
@@ -11,20 +11,18 @@ const Post = ({ id, title, author, publishedDate, shortDescription }) => {
           <span>Author:</span> {author}
         </p>
         <p>
-          <span>Published:</span> {author}
-        </p>
-        <p>
           <span>PublishedDate:</span> {publishedDate}
         </p>
         <p>{shortDescription}</p>
-        <NavLink
+        <Link
           className='bg-primary text-decoration-none text-white list-style-none rounded p-2'
+          key={id}
           to={"/post/" + id}>
           Read more!
-        </NavLink>
+        </Link>
       </div>
     </Container>
   );
 };
 
-export default Post;
+export default PostCard;
