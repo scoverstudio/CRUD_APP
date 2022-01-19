@@ -10,16 +10,35 @@ const PostForm = ({ action, actionText, ...props }) => {
     props.shortDescription || ""
   );
   const [content, setContent] = useState(props.content || "");
-
   const navigate = useNavigate();
-  console.log(props.title);
+
+  const clearState = () => {
+    setTitle("");
+    setAuthor("");
+    setPublishedDate("");
+    setShortDescritpion("");
+    setContent("");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title && author && publishedDate && shortDescription && content) {
+
+    if (!title.match(/^[0-9a-zA-Z]+$/)) {
+      alert("Use only letters and numbers for title!");
+    } else if (!author.match(/^[a-zA-Z]+$/)) {
+      alert("Use only letters for author!");
+    } else if (
+      title &&
+      author &&
+      publishedDate &&
+      shortDescription &&
+      content
+    ) {
       action({ title, author, publishedDate, shortDescription, content });
       navigate("/", { replace: true });
+      clearState();
     } else {
-      alert("uzupelnij");
+      alert("Uzupelnij wszystkie pola!");
     }
   };
 

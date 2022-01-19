@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, ButtonGroup, Container, Modal } from "react-bootstrap";
+import { Button, Container, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getPostsById, removePost } from "../../../redux/postsRedux";
@@ -15,7 +15,7 @@ const Post = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleDelate = () => {
+  const handleDelete = () => {
     dispatch(removePost(id));
   };
 
@@ -34,7 +34,7 @@ const Post = () => {
           <Button variant='secondary' onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant='danger' onClick={handleDelate}>
+          <Button variant='danger' onClick={handleDelete}>
             Remove
           </Button>
         </Modal.Footer>
@@ -57,13 +57,11 @@ const Post = () => {
         <div className='post-navigation'>
           <Link to={"/post/edit/" + postData.id}>
             <Button variant='outline-info' className='m-1'>
-              {" "}
-              Edit{" "}
+              Edit
             </Button>
           </Link>
           <Button onClick={handleShow} variant='outline-danger' className='m-1'>
-            {" "}
-            Delate{" "}
+            Delete
           </Button>
         </div>
       </div>

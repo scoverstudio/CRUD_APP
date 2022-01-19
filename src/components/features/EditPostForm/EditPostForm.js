@@ -1,22 +1,21 @@
 import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { editPost, getAllPosts } from "../../../redux/postsRedux";
+import { editPost, getPostsById } from "../../../redux/postsRedux";
 import PostForm from "../PostForm/PostForm";
 
 const EditPostForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const posts = useSelector(getAllPosts);
+  const post = useSelector((state) => getPostsById(state, id))
+
   const handleSubmit = (post) => {
     dispatch(editPost({ ...post, id }));
     navigate("/");
   };
   return (
     <Container>
-      {posts.map((post) =>
-        post.id === id ? (
           <PostForm
             key={post.id}
             action={handleSubmit}
@@ -25,10 +24,8 @@ const EditPostForm = () => {
             publishedDate={post.publishedDate}
             shortDescription={post.shortDescription}
             content={post.content}
-            actionText={"Edit post"}
+            actionText='Edit post'
           />
-        ) : null
-      )}
     </Container>
   );
 };

@@ -5,15 +5,15 @@ import { addPost } from "../../../redux/postsRedux";
 import PostForm from "../PostForm/PostForm";
 
 const AddPostForm = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const handleSubmit = post => {
-      dispatch(addPost(post));
-      navigate('/');
-    }
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleSubmit = (post) => {
+    dispatch(addPost(post));
+    navigate("/");
+  };
   return (
     <Container>
-      <PostForm action={handleSubmit} actionText={'Add post'}/>
+      <PostForm action={handleSubmit} actionText='Add post' />
     </Container>
   );
 };
