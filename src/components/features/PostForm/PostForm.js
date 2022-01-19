@@ -2,10 +2,15 @@ import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
+const prepareDate = (date) => {
+  const newDate = new Date(date)
+  return newDate.toISOString().split('T')[0]
+}
+
 const PostForm = ({ action, actionText, ...props }) => {
   const [title, setTitle] = useState(props.title || "");
   const [author, setAuthor] = useState(props.author || "");
-  const [publishedDate, setPublishedDate] = useState(props.publishedDate || "");
+  const [publishedDate, setPublishedDate] = useState(props.publishedDate ? prepareDate(props.publishedDate) : "");
   const [shortDescription, setShortDescritpion] = useState(
     props.shortDescription || ""
   );
@@ -23,7 +28,7 @@ const PostForm = ({ action, actionText, ...props }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title.match(/[0-9a-zA-Z]+$/)) {
+    if (!title.match(/^[a-zA-Z]{0,5}[0-9]{0,5}[a-zA-Z]+$/)) {
       alert("Use only letters and numbers for title!");
     } else if (!author.match(/[a-zA-Z]+$/)) {
       alert("Use only letters for author!");
