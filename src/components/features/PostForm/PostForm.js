@@ -23,9 +23,9 @@ const PostForm = ({ action, actionText, ...props }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title.match(/^[0-9a-zA-Z]+$/)) {
+    if (!title.match(/[0-9a-zA-Z]+$/)) {
       alert("Use only letters and numbers for title!");
-    } else if (!author.match(/^[a-zA-Z]+$/)) {
+    } else if (!author.match(/[a-zA-Z]+$/)) {
       alert("Use only letters for author!");
     } else if (
       title &&
