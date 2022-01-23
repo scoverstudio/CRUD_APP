@@ -3,14 +3,16 @@ import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const prepareDate = (date) => {
-  const newDate = new Date(date)
-  return newDate.toISOString().split('T')[0]
-}
+  const newDate = new Date(date);
+  return newDate.toISOString().split("T")[0];
+};
 
 const PostForm = ({ action, actionText, ...props }) => {
   const [title, setTitle] = useState(props.title || "");
   const [author, setAuthor] = useState(props.author || "");
-  const [publishedDate, setPublishedDate] = useState(props.publishedDate ? prepareDate(props.publishedDate) : "");
+  const [publishedDate, setPublishedDate] = useState(
+    props.publishedDate ? prepareDate(props.publishedDate) : ""
+  );
   const [shortDescription, setShortDescritpion] = useState(
     props.shortDescription || ""
   );
@@ -28,8 +30,12 @@ const PostForm = ({ action, actionText, ...props }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title.match(/^[a-zA-Z]{0,5}[0-9]{0,5}[a-zA-Z]+$/)) {
+    if (!title) {
+      alert("Title is empty!");
+    } else if (!title.match(/^[a-zA-Z]{0,5}[0-9]{0,5}[a-zA-Z]+$/)) {
       alert("Use only letters and numbers for title!");
+    } else if (!author) {
+      alert("Author is empty!");
     } else if (!author.match(/[a-zA-Z]+$/)) {
       alert("Use only letters for author!");
     } else if (
@@ -49,62 +55,65 @@ const PostForm = ({ action, actionText, ...props }) => {
 
   return (
     <Container>
-      <h2 className='mb-4'>{actionText}!</h2>
+      <h2 className="mb-4">{actionText}!</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group
-          className='mb-3 col-6'
-          controlId='exampleForm.ControlInput1'>
+          className="mb-3 col-6"
+          controlId="exampleForm.ControlInput1"
+        >
           <Form.Label>Title</Form.Label>
           <Form.Control
-            type='text'
-            placeholder='Enter title'
+            type="text"
+            placeholder="Enter title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </Form.Group>
         <Form.Group
-          className='mb-3 col-6'
-          controlId='exampleForm.ControlInput1'>
+          className="mb-3 col-6"
+          controlId="exampleForm.ControlInput1"
+        >
           <Form.Label>Author</Form.Label>
           <Form.Control
-            type='text'
-            placeholder='Enter author'
+            type="text"
+            placeholder="Enter author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
           />
         </Form.Group>
         <Form.Group
-          className='mb-3 col-6'
-          controlId='exampleForm.ControlInput1'>
+          className="mb-3 col-6"
+          controlId="exampleForm.ControlInput1"
+        >
           <Form.Label>Published</Form.Label>
           <Form.Control
-            type='date'
-            placeholder='Enter date'
+            type="date"
+            placeholder="Enter date"
             value={publishedDate}
             onChange={(e) => setPublishedDate(e.target.value)}
           />
         </Form.Group>
-        <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Form.Label>Short description</Form.Label>
           <Form.Control
-            as='textarea'
-            rows='3'
-            placeholder='Leave a comment here'
+            as="textarea"
+            rows="3"
+            placeholder="Leave a comment here"
             value={shortDescription}
             onChange={(e) => setShortDescritpion(e.target.value)}
           />
         </Form.Group>
-        <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Form.Label>Main content</Form.Label>
           <Form.Control
-            as='textarea'
-            rows='6'
-            placeholder='Leave a comment here'
+            as="textarea"
+            rows="6"
+            placeholder="Leave a comment here"
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
         </Form.Group>
-        <Button type='submit'>{actionText}</Button>
+        <Button type="submit">{actionText}</Button>
       </Form>
     </Container>
   );
