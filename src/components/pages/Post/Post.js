@@ -3,7 +3,7 @@ import { Button, Container, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getPostsById, removePost } from "../../../redux/postsRedux";
-import styles from "./Post.module.scss";
+import { dateToStr } from "../../../utils/dateToStr";
 
 const Post = () => {
   const dispatch = useDispatch();
@@ -19,9 +19,9 @@ const Post = () => {
     dispatch(removePost(id));
   };
 
-  if (!postData) return <Navigate to='/' />;
+  if (!postData) return <Navigate to="/" />;
   return (
-    <Container className='col-8'>
+    <Container className="col-8">
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
@@ -31,10 +31,10 @@ const Post = () => {
           sure you want to do that?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='secondary' onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant='danger' onClick={handleDelete}>
+          <Button variant="danger" onClick={handleDelete}>
             Remove
           </Button>
         </Modal.Footer>
@@ -42,25 +42,27 @@ const Post = () => {
       <div
         className={
           "border border-muted p-3 mb-3 d-flex justify-content-between"
-        }>
-        <div className='post'>
+        }
+      >
+        <div className="post">
           <h3>{postData.title}</h3>
           <p>
             <span>Author:</span> {postData.author}
           </p>
           <p>
-            <span>PublishedDate:</span> {postData.publishedDate}
+            <span>PublishedDate:</span> {dateToStr(postData.publishedDate)}
           </p>
-          <p>{postData.shortDescription}</p>
-          <p>{postData.content}</p>
+          <p dangerouslySetInnerHTML={{ __html: postData.shortDescription }} />
+
+          <p dangerouslySetInnerHTML={{ __html: postData.content }} />
         </div>
-        <div className='post-navigation'>
+        <div className="post-navigation">
           <Link to={"/post/edit/" + postData.id}>
-            <Button variant='outline-info' className='m-1'>
+            <Button variant="outline-info" className="m-1">
               Edit
             </Button>
           </Link>
-          <Button onClick={handleShow} variant='outline-danger' className='m-1'>
+          <Button onClick={handleShow} variant="outline-danger" className="m-1">
             Delete
           </Button>
         </div>

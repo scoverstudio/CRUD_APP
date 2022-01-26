@@ -1,23 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
-const prepareDate = (date) => {
-  const newDate = new Date(date);
-  return newDate.toISOString().split("T")[0];
-};
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import DatePicker from "react-datepicker";
+import { useForm } from "react-hook-form";
+import { getTextFromHtml } from "../../../utils/getTextFromHtml";
 
 const PostForm = ({ action, actionText, ...props }) => {
   const [title, setTitle] = useState(props.title || "");
   const [author, setAuthor] = useState(props.author || "");
   const [publishedDate, setPublishedDate] = useState(
-    props.publishedDate ? prepareDate(props.publishedDate) : ""
+    props.publishedDate || new Date()
   );
   const [shortDescription, setShortDescritpion] = useState(
     props.shortDescription || ""
   );
   const [content, setContent] = useState(props.content || "");
+  const [contentError, setContentError] = useState(false);
+  const [dateError, setDateError] = useState(false);
+
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit: validate,
+    formState: { errors },
+  } = useForm();
 
   const clearState = () => {
     setTitle("");
@@ -27,91 +35,126 @@ const PostForm = ({ action, actionText, ...props }) => {
     setContent("");
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!title) {
-      alert("Title is empty!");
-    } else if (!title.match(/^[a-zA-Z]{0,5}[0-9]{0,5}[a-zA-Z]+$/)) {
-      alert("Use only letters and numbers for title!");
-    } else if (!author) {
-      alert("Author is empty!");
-    } else if (!author.match(/[a-zA-Z]+$/)) {
-      alert("Use only letters for author!");
-    } else if (
-      title &&
-      author &&
-      publishedDate &&
-      shortDescription &&
-      content
-    ) {
+  const handleSubmit = () => {
+    setContentError(!content);
+    setDateError(!publishedDate);
+    if (content && publishedDate) {
       action({ title, author, publishedDate, shortDescription, content });
       navigate("/", { replace: true });
       clearState();
-    } else {
-      alert("Uzupelnij wszystkie pola!");
     }
   };
 
   return (
     <Container>
       <h2 className="mb-4">{actionText}!</h2>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group
-          className="mb-3 col-6"
-          controlId="exampleForm.ControlInput1"
-        >
+      <Form onSubmit={validate(handleSubmit)}>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Title</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Enter title"
+            {...register("title", {
+              required: {
+                value: true,
+                message: "Title field is required",
+              },
+              minLength: {
+                value: 3,
+                message: "min. 3 characters",
+              },
+            })}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            type="text"
+            placeholder="Enter title"
           />
+          {errors.title && (
+            <span className="d-block form-text text-danger mt-2">
+              {errors.title.message}
+            </span>
+          )}
         </Form.Group>
+
         <Form.Group
           className="mb-3 col-6"
           controlId="exampleForm.ControlInput1"
         >
           <Form.Label>Author</Form.Label>
           <Form.Control
+            {...register("author", {
+              required: {
+                value: true,
+                message: "Author field is required",
+              },
+              minLength: {
+                value: 3,
+                message: "min. 3 characters",
+              },
+            })}
             type="text"
             placeholder="Enter author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
           />
+          {errors.author && (
+            <small className="d-block form-text text-danger mt-2">
+              {errors.author.message}
+            </small>
+          )}
         </Form.Group>
         <Form.Group
           className="mb-3 col-6"
           controlId="exampleForm.ControlInput1"
         >
           <Form.Label>Published</Form.Label>
-          <Form.Control
-            type="date"
-            placeholder="Enter date"
-            value={publishedDate}
-            onChange={(e) => setPublishedDate(e.target.value)}
+          <DatePicker
+            selected={publishedDate}
+            onChange={(date) => setPublishedDate(date)}
           />
+          {dateError && (
+            <small className="d-block form-text text-danger mt-2">
+              Date can't be empty
+            </small>
+          )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Form.Label>Short description</Form.Label>
           <Form.Control
-            as="textarea"
-            rows="3"
-            placeholder="Leave a comment here"
+            {...register("shortDescription", {
+              required: {
+                value: true,
+                message: "Title field is required",
+              },
+              minLength: {
+                value: 20,
+                message: "Text should be between 20 and 100 characters.",
+              },
+            })}
+            name="shortDescription"
+            theme="snow"
             value={shortDescription}
+            placeholder="Leave a comment here"
             onChange={(e) => setShortDescritpion(e.target.value)}
           />
+          {errors.shortDescription && (
+            <small className="d-block form-text text-danger mt-2">
+              {errors.shortDescription.message}
+            </small>
+          )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Form.Label>Main content</Form.Label>
-          <Form.Control
+          <ReactQuill
             as="textarea"
             rows="6"
             placeholder="Leave a comment here"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={setContent}
           />
+          {contentError && (
+            <small className="d-block form-text text-danger mt-2">
+              Content can't be empty
+            </small>
+          )}
         </Form.Group>
         <Button type="submit">{actionText}</Button>
       </Form>
