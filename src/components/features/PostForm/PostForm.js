@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DatePicker from "react-datepicker";
 import { useForm } from "react-hook-form";
-import { getTextFromHtml } from "../../../utils/getTextFromHtml";
+import { useSelector } from "react-redux";
+import {
+  getAllCategories,
+  getCategoriesById,
+} from "../../../redux/categoriesRedux";
 
 const PostForm = ({ action, actionText, ...props }) => {
   const [title, setTitle] = useState(props.title || "");
@@ -16,6 +20,13 @@ const PostForm = ({ action, actionText, ...props }) => {
   const [shortDescription, setShortDescritpion] = useState(
     props.shortDescription || ""
   );
+
+  const categoryById = useSelector((state) =>
+    getCategoriesById(state, props.categoryId)
+  );
+  const categories = useSelector((state) => getAllCategories(state));
+  const [category, setCategory] = useState(categoryById || "");
+
   const [content, setContent] = useState(props.content || "");
   const [contentError, setContentError] = useState(false);
   const [dateError, setDateError] = useState(false);
@@ -39,7 +50,14 @@ const PostForm = ({ action, actionText, ...props }) => {
     setContentError(!content);
     setDateError(!publishedDate);
     if (content && publishedDate) {
-      action({ title, author, publishedDate, shortDescription, content });
+      action({
+        title,
+        author,
+        publishedDate,
+        shortDescription,
+        content,
+        category,
+      });
       navigate("/", { replace: true });
       clearState();
     }
@@ -114,6 +132,32 @@ const PostForm = ({ action, actionText, ...props }) => {
             <small className="d-block form-text text-danger mt-2">
               Date can't be empty
             </small>
+          )}
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Category:</Form.Label>
+          <Form.Control
+            as="select"
+            {...register("Category", {
+              required: {
+                value: true,
+                message: "Category field is required",
+              },
+            })}
+            type="text"
+            value={category.value}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {categories.map((category) => (
+              <option key={category.id} value={`${category.value}`}>
+                {category.value}
+              </option>
+            ))}
+          </Form.Control>
+          {errors.title && (
+            <span className="d-block form-text text-danger mt-2">
+              {errors.title.message}
+            </span>
           )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">

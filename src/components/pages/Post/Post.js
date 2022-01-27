@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getPostsById, removePost } from "../../../redux/postsRedux";
 import { dateToStr } from "../../../utils/dateToStr";
+import "./Post.module.scss";
 
 const Post = () => {
   const dispatch = useDispatch();
@@ -47,10 +48,13 @@ const Post = () => {
         <div className="post">
           <h3>{postData.title}</h3>
           <p>
-            <span>Author:</span> {postData.author}
+            <span>Author: </span> {postData.author}
           </p>
           <p>
-            <span>PublishedDate:</span> {dateToStr(postData.publishedDate)}
+            <span>PublishedDate: </span> {dateToStr(postData.publishedDate)}
+          </p>
+          <p>
+            <span>Category: </span> {postData.category}
           </p>
           <p dangerouslySetInnerHTML={{ __html: postData.shortDescription }} />
 

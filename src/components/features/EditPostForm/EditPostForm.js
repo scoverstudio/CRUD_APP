@@ -8,7 +8,7 @@ const EditPostForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const post = useSelector((state) => getPostsById(state, id))
+  const post = useSelector((state) => getPostsById(state, id));
 
   const handleSubmit = (post) => {
     dispatch(editPost({ ...post, id }));
@@ -16,16 +16,18 @@ const EditPostForm = () => {
   };
   return (
     <Container>
-          <PostForm
-            key={post.id}
-            action={handleSubmit}
-            title={post.title}
-            author={post.author}
-            publishedDate={post.publishedDate}
-            shortDescription={post.shortDescription}
-            content={post.content}
-            actionText='Edit post'
-          />
+      <PostForm
+        key={post.id}
+        action={handleSubmit}
+        title={post.title}
+        author={post.author}
+        publishedDate={post.publishedDate}
+        shortDescription={post.shortDescription}
+        content={post.content}
+        category={post.category}
+        categoryId={post.categoryId}
+        actionText="Edit post"
+      />
     </Container>
   );
 };
